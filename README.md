@@ -1,6 +1,6 @@
 # Bd-tecnico-sql-postgresql
-en el siguiente repositorio encontrará una bd sql en postgresql de una escuela técnica de programación
+En el siguiente repositorio encontrará una bd sql en postgresql de una escuela técnica de programación
 
-&#128190; lenguaje sql.<br>
-Sistema de administracion de bd: posrgresql<br>
+&#128466; lenguaje sql.<br>
+&#128024; Sistema de administracion de bd: posrgresql<br>
 
