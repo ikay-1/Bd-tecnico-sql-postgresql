@@ -1,0 +1,839 @@
+--crear cursos: los cursos tienen estudiantes y tiene materias
+
+CREATE TABLE "Francisco Franco".cursos
+(
+    cursos_id serial NOT NULL,
+    cursos_nombre character varying(100) NOT NULL,
+    PRIMARY KEY (cursos_id),
+    CONSTRAINT curso_nombre_unico UNIQUE (cursos_nombre)
+);
+
+ALTER TABLE IF EXISTS "Francisco Franco".cursos
+    OWNER to "Comfe_owner";
+	
+INSERT INTO "Francisco Franco".cursos (cursos_nombre) VALUES 
+('Curso Nivel 1 - Introducción a la Programación'),
+('Curso Nivel 2 - Programación Intermedia'),
+('Curso Nivel 3 - Programación Avanzada'),
+('Curso Nivel 4 - Algoritmos y Estructuras de Datos'),
+('Curso Nivel 5 - Desarrollo de Proyectos');
+
+select * from "Francisco Franco".cursos
+
+
+-- crear profesores: los profesores solo dan una materia y las materias solo son dadas por un profesores
+
+CREATE TABLE "Francisco Franco".profesores
+(
+    profesores_id serial NOT NULL,
+    profesores_documento character varying(9) NOT NULL,
+    profesores_nombre character varying(100) NOT NULL,
+    PRIMARY KEY (profesores_id),
+    CONSTRAINT profesores_documento_unico UNIQUE (profesores_documento)
+);
+
+ALTER TABLE IF EXISTS "Francisco Franco".profesores
+    OWNER to "Comfe_owner";
+	
+INSERT INTO "Francisco Franco".profesores (profesores_documento, profesores_nombre) VALUES
+('100000001', 'Juan Pérez'),
+('100000002', 'María Gómez'),
+('100000003', 'Carlos Ramírez'),
+('100000004', 'Ana Torres'),
+('100000005', 'Luis Fernández'),
+('100000006', 'Laura Medina'),
+('100000007', 'José Morales'),
+('100000008', 'Claudia Ríos'),
+('100000009', 'Miguel Castro'),
+('100000010', 'Isabel Suárez'),
+('100000011', 'Pedro López'),
+('100000012', 'Carmen Vega'),
+('100000013', 'Andrés Silva'),
+('100000014', 'Sofía Navarro'),
+('100000015', 'Raúl Soto'),
+('100000016', 'Elena Fuentes'),
+('100000017', 'Héctor Ruiz'),
+('100000018', 'Mónica Cárdenas'),
+('100000019', 'Diego Herrera'),
+('100000020', 'Valeria Paredes'),
+('100000021', 'Samuel Ortiz'),
+('100000022', 'Natalia Blanco'),
+('100000023', 'Fernando Cruz'),
+('100000024', 'Camila Duarte'),
+('100000025', 'Javier Méndez'),
+('100000026', 'Paula Ibáñez'),
+('100000027', 'Emilio Vargas'),
+('100000028', 'Gabriela León'),
+('100000029', 'Alberto Molina'),
+('100000030', 'Rosa Salazar');
+
+select * from "Francisco Franco".profesores 
+
+-- crear materias : las materias las dicta solo un profesor y pertenecen solo a un cursos
+CREATE TABLE "Francisco Franco".materias
+(
+    materias_id serial NOT NULL,
+    materias_nombre character varying(50) NOT NULL,
+    cursos_id integer NOT NULL,
+    profesores_id integer NOT NULL,
+    PRIMARY KEY (materias_id),
+    CONSTRAINT materias_nombre_unico UNIQUE (materias_nombre),
+    CONSTRAINT profesores_id_unico UNIQUE (profesores_id),
+    CONSTRAINT materias_cursos FOREIGN KEY (cursos_id)
+        REFERENCES "Francisco Franco".cursos (cursos_id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+        NOT VALID,
+    CONSTRAINT materias_profesores FOREIGN KEY (profesores_id)
+        REFERENCES "Francisco Franco".profesores (profesores_id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+        NOT VALID
+);
+
+ALTER TABLE IF EXISTS "Francisco Franco".materias
+    OWNER to "Comfe_owner";
+	
+
+
+INSERT INTO "Francisco Franco".materias (materias_nombre, cursos_id, profesores_id) VALUES
+-- Curso 1
+('Matemáticas Básicas', 1, 1),
+('Introducción a la Programación', 1, 2),
+('Historia General', 1, 3),
+('Física Básica', 1, 4),
+('Inglés I', 1, 5),
+('Ciencias Naturales', 1, 6),
+
+-- Curso 2
+('Álgebra Intermedia', 2, 7),
+('Programación Intermedia', 2, 8),
+('Historia Contemporánea', 2, 9),
+('Física Intermedia', 2, 10),
+('Inglés II', 2, 11),
+('Biología', 2, 12),
+
+-- Curso 3
+('Cálculo', 3, 13),
+('Programación Avanzada', 3, 14),
+('Filosofía', 3, 15),
+('Química', 3, 16),
+('Inglés III', 3, 17),
+('Ecología', 3, 18),
+
+-- Curso 4
+('Estadística', 4, 19),
+('Algoritmos y Estructuras', 4, 20),
+('Literatura', 4, 21),
+('Física Avanzada', 4, 22),
+('Inglés IV', 4, 23),
+('Genética', 4, 24),
+
+-- Curso 5
+('Matemáticas Aplicadas', 5, 25),
+('Desarrollo de Proyectos', 5, 26),
+('Historia del Arte', 5, 27),
+('Química Orgánica', 5, 28),
+('Inglés V', 5, 29),
+('Biotecnología', 5, 30);
+
+select * from "Francisco Franco".materias
+
+-- crear tabla estudiantes: un estudiante pertenece a un curso y un curso tiene varios estudiantes 
+CREATE TABLE "Francisco Franco".estudiantes
+(
+    estudiantes_id serial NOT NULL,
+    estudiantes_documento character varying(10) NOT NULL,
+    estudiantes_nombre character varying(100) NOT NULL,
+    estudiantes_edad smallint NOT NULL,
+    estudiantes_tipo_sangre character varying(3),
+    cursos_id integer NOT NULL,
+    PRIMARY KEY (estudiantes_id),
+    CONSTRAINT estudiantes_documento_unico UNIQUE (estudiantes_documento),
+    CONSTRAINT estudiantes_cursos FOREIGN KEY (cursos_id)
+        REFERENCES "Francisco Franco".cursos (cursos_id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+        NOT VALID
+);
+
+ALTER TABLE IF EXISTS "Francisco Franco".estudiantes
+    OWNER to "Comfe_owner";
+
+
+INSERT INTO "Francisco Franco".estudiantes (estudiantes_documento, estudiantes_nombre, estudiantes_edad, estudiantes_tipo_sangre, cursos_id) VALUES
+-- Curso 1
+('1000000001', 'Pedro González', 18, 'O+', 1),
+('1000000002', 'Ana Ramírez', 19, 'A-', 1),
+('1000000003', 'Luis Fernández', 20, 'B+', 1),
+('1000000004', 'Carla López', 18, 'AB+', 1),
+('1000000005', 'Miguel Torres', 19, 'O-', 1),
+
+-- Curso 2
+('1000000006', 'Sara Méndez', 21, 'A+', 2),
+('1000000007', 'Diego Cruz', 22, 'B-', 2),
+('1000000008', 'Laura Vargas', 20, 'O+', 2),
+('1000000009', 'Javier Mora', 19, 'AB-', 2),
+('1000000010', 'Camila Díaz', 21, 'A-', 2),
+('1000000011', 'Andrés Pardo', 22, 'B+', 2),
+('1000000012', 'Mónica Ruiz', 20, 'O-', 2),
+('1000000013', 'Santiago Herrera', 21, 'A+', 2),
+
+-- Curso 3
+('1000000014', 'Valentina Soto', 19, 'AB+', 3),
+('1000000015', 'Daniela Vega', 22, 'B-', 3),
+
+-- Curso 4
+('1000000016', 'Fernando Ibáñez', 20, 'A-', 4),
+('1000000017', 'Isabel Ortiz', 21, 'O+', 4),
+('1000000018', 'Tomás Silva', 19, 'B+', 4),
+('1000000019', 'Lucía Cárdenas', 20, 'AB-', 4),
+('1000000020', 'Pablo Ríos', 22, 'A+', 4),
+('1000000021', 'Esteban Gutiérrez', 21, 'O-', 4),
+('1000000022', 'Mariana León', 19, 'B-', 4),
+
+-- Curso 5
+('1000000023', 'Samuel Méndez', 20, 'A+', 5),
+('1000000024', 'Paula Castillo', 22, 'AB+', 5),
+('1000000025', 'Emilio Castro', 21, 'O+', 5);
+
+select * from "Francisco Franco".estudiantes 
+
+-- crear tabla notas
+CREATE TABLE "Francisco Franco".notas
+(
+    notas_id serial NOT NULL,
+    estudiantes_id integer NOT NULL,
+    materias_id integer NOT NULL,
+    notas_puntaje integer NOT NULL,
+    PRIMARY KEY (notas_id),
+    CONSTRAINT notas_estudiantes FOREIGN KEY (estudiantes_id)
+        REFERENCES "Francisco Franco".estudiantes (estudiantes_id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+        NOT VALID,
+    CONSTRAINT notas_materias FOREIGN KEY (materias_id)
+        REFERENCES "Francisco Franco".materias (materias_id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+        NOT VALID
+);
+
+ALTER TABLE IF EXISTS "Francisco Franco".notas
+    OWNER to "Comfe_owner";
+	
+-- cada curso tiene 6 materias
+-- curso 1:5, 2:8, 3:2, 4:7, 5:3
+--en cada materia los estudiantes deben tener las misma cantidad de notas 
+
+-- cada curso tiene 6 materias
+-- curso 1:5, 2:8, 3:2, 4:7, 5:3
+--en cada materia los estudiantes deben tener las misma cantidad de notas 
+
+INSERT INTO "Francisco Franco".notas (estudiantes_id, materias_id, notas_puntaje) VALUES
+--curso 1 materia 1 falta 1 nota 
+(1, 1, FLOOR(RANDOM() * 5) + 1),
+(1, 1, FLOOR(RANDOM() * 5) + 1),
+(1, 1, FLOOR(RANDOM() * 5) + 1),
+(1, 1, FLOOR(RANDOM() * 5) + 1),
+
+(2, 1, FLOOR(RANDOM() * 5) + 1),
+(2, 1, FLOOR(RANDOM() * 5) + 1),
+(2, 1, FLOOR(RANDOM() * 5) + 1),
+(2, 1, FLOOR(RANDOM() * 5) + 1),
+
+(3, 1, FLOOR(RANDOM() * 5) + 1),
+(3, 1, FLOOR(RANDOM() * 5) + 1),
+(3, 1, FLOOR(RANDOM() * 5) + 1),
+(3, 1, FLOOR(RANDOM() * 5) + 1),
+
+(4, 1, FLOOR(RANDOM() * 5) + 1),
+(4, 1, FLOOR(RANDOM() * 5) + 1),
+(4, 1, FLOOR(RANDOM() * 5) + 1),
+(4, 1, FLOOR(RANDOM() * 5) + 1),
+
+(5, 1, FLOOR(RANDOM() * 5) + 1),
+(5, 1, FLOOR(RANDOM() * 5) + 1),
+(5, 1, FLOOR(RANDOM() * 5) + 1),
+(5, 1, FLOOR(RANDOM() * 5) + 1),
+
+(6, 1, FLOOR(RANDOM() * 5) + 1),
+(6, 1, FLOOR(RANDOM() * 5) + 1),
+(6, 1, FLOOR(RANDOM() * 5) + 1),
+
+--curso 1 materia 2
+(1, 2, FLOOR(RANDOM() * 5) + 1),
+(1, 2, FLOOR(RANDOM() * 5) + 1),
+(1, 2, FLOOR(RANDOM() * 5) + 1),
+(1, 2, FLOOR(RANDOM() * 5) + 1),
+
+(2, 2, FLOOR(RANDOM() * 5) + 1),
+(2, 2, FLOOR(RANDOM() * 5) + 1),
+(2, 2, FLOOR(RANDOM() * 5) + 1),
+(2, 2, FLOOR(RANDOM() * 5) + 1),
+
+(3, 2, FLOOR(RANDOM() * 5) + 1),
+(3, 2, FLOOR(RANDOM() * 5) + 1),
+(3, 2, FLOOR(RANDOM() * 5) + 1),
+(3, 2, FLOOR(RANDOM() * 5) + 1),
+
+(4, 2, FLOOR(RANDOM() * 5) + 1),
+(4, 2, FLOOR(RANDOM() * 5) + 1),
+(4, 2, FLOOR(RANDOM() * 5) + 1),
+(4, 2, FLOOR(RANDOM() * 5) + 1),
+
+(5, 2, FLOOR(RANDOM() * 5) + 1),
+(5, 2, FLOOR(RANDOM() * 5) + 1),
+(5, 2, FLOOR(RANDOM() * 5) + 1),
+(5, 2, FLOOR(RANDOM() * 5) + 1),
+
+(6, 2, FLOOR(RANDOM() * 5) + 1),
+(6, 2, FLOOR(RANDOM() * 5) + 1),
+(6, 2, FLOOR(RANDOM() * 5) + 1),
+(6, 2, FLOOR(RANDOM() * 5) + 1),
+
+-- curso 1 materia 3
+(1, 3, FLOOR(RANDOM() * 5) + 1),
+(1, 3, FLOOR(RANDOM() * 5) + 1),
+(1, 3, FLOOR(RANDOM() * 5) + 1),
+(1, 3, FLOOR(RANDOM() * 5) + 1),
+
+(2, 3, FLOOR(RANDOM() * 5) + 1),
+(2, 3, FLOOR(RANDOM() * 5) + 1),
+(2, 3, FLOOR(RANDOM() * 5) + 1),
+(2, 3, FLOOR(RANDOM() * 5) + 1),
+
+(3, 3, FLOOR(RANDOM() * 5) + 1),
+(3, 3, FLOOR(RANDOM() * 5) + 1),
+(3, 3, FLOOR(RANDOM() * 5) + 1),
+(3, 3, FLOOR(RANDOM() * 5) + 1),
+
+(4, 3, FLOOR(RANDOM() * 5) + 1),
+(4, 3, FLOOR(RANDOM() * 5) + 1),
+(4, 3, FLOOR(RANDOM() * 5) + 1),
+(4, 4, FLOOR(RANDOM() * 5) + 1),
+
+(5, 3, FLOOR(RANDOM() * 5) + 1),
+(5, 3, FLOOR(RANDOM() * 5) + 1),
+(5, 3, FLOOR(RANDOM() * 5) + 1),
+(5, 3, FLOOR(RANDOM() * 5) + 1),
+
+(6, 3, FLOOR(RANDOM() * 5) + 1),
+(6, 3, FLOOR(RANDOM() * 5) + 1),
+(6, 3, FLOOR(RANDOM() * 5) + 1),
+(6, 3, FLOOR(RANDOM() * 5) + 1),
+
+-- curso 1 materia 4
+(1, 4, FLOOR(RANDOM() * 5) + 1),
+(1, 4, FLOOR(RANDOM() * 5) + 1),
+(1, 4, FLOOR(RANDOM() * 5) + 1),
+(1, 4, FLOOR(RANDOM() * 5) + 1),
+
+(2, 4, FLOOR(RANDOM() * 5) + 1),
+(2, 4, FLOOR(RANDOM() * 5) + 1),
+(2, 4, FLOOR(RANDOM() * 5) + 1),
+(2, 4, FLOOR(RANDOM() * 5) + 1),
+
+(3, 4, FLOOR(RANDOM() * 5) + 1),
+(3, 4, FLOOR(RANDOM() * 5) + 1),
+(3, 4, FLOOR(RANDOM() * 5) + 1),
+(3, 4, FLOOR(RANDOM() * 5) + 1),
+
+(4, 4, FLOOR(RANDOM() * 5) + 1),
+(4, 4, FLOOR(RANDOM() * 5) + 1),
+(4, 4, FLOOR(RANDOM() * 5) + 1),
+(4, 4, FLOOR(RANDOM() * 5) + 1),
+
+(5, 4, FLOOR(RANDOM() * 5) + 1),
+(5, 4, FLOOR(RANDOM() * 5) + 1),
+(5, 4, FLOOR(RANDOM() * 5) + 1),
+(5, 4, FLOOR(RANDOM() * 5) + 1),
+
+(6, 4, FLOOR(RANDOM() * 5) + 1),
+(6, 4, FLOOR(RANDOM() * 5) + 1),
+(6, 4, FLOOR(RANDOM() * 5) + 1),
+(6, 4, FLOOR(RANDOM() * 5) + 1),
+
+-- curso 1 materia 5
+(1, 5, FLOOR(RANDOM() * 5) + 1),
+(1, 5, FLOOR(RANDOM() * 5) + 1),
+(1, 5, FLOOR(RANDOM() * 5) + 1),
+(1, 5, FLOOR(RANDOM() * 5) + 1),
+
+(2, 5, FLOOR(RANDOM() * 5) + 1),
+(2, 5, FLOOR(RANDOM() * 5) + 1),
+(2, 5, FLOOR(RANDOM() * 5) + 1),
+(2, 5, FLOOR(RANDOM() * 5) + 1),
+
+(3, 5, FLOOR(RANDOM() * 5) + 1),
+(3, 5, FLOOR(RANDOM() * 5) + 1),
+(3, 5, FLOOR(RANDOM() * 5) + 1),
+(3, 5, FLOOR(RANDOM() * 5) + 1),
+
+(4, 5, FLOOR(RANDOM() * 5) + 1),
+(4, 5, FLOOR(RANDOM() * 5) + 1),
+(4, 5, FLOOR(RANDOM() * 5) + 1),
+(4, 5, FLOOR(RANDOM() * 5) + 1),
+
+(5, 5, FLOOR(RANDOM() * 5) + 1),
+(5, 5, FLOOR(RANDOM() * 5) + 1),
+(5, 5, FLOOR(RANDOM() * 5) + 1),
+(5, 5, FLOOR(RANDOM() * 5) + 1),
+
+(6, 5, FLOOR(RANDOM() * 5) + 1),
+(6, 5, FLOOR(RANDOM() * 5) + 1),
+(6, 5, FLOOR(RANDOM() * 5) + 1),
+(6, 5, FLOOR(RANDOM() * 5) + 1),
+
+-- curso 1 materia 6
+(1, 6, FLOOR(RANDOM() * 5) + 1),
+(1, 6, FLOOR(RANDOM() * 5) + 1),
+(1, 6, FLOOR(RANDOM() * 5) + 1),
+(1, 6, FLOOR(RANDOM() * 5) + 1),
+
+(2, 6, FLOOR(RANDOM() * 5) + 1),
+(2, 6, FLOOR(RANDOM() * 5) + 1),
+(2, 6, FLOOR(RANDOM() * 5) + 1),
+(2, 6, FLOOR(RANDOM() * 5) + 1),
+
+(3, 6, FLOOR(RANDOM() * 5) + 1),
+(3, 6, FLOOR(RANDOM() * 5) + 1),
+(3, 6, FLOOR(RANDOM() * 5) + 1),
+(3, 6, FLOOR(RANDOM() * 5) + 1),
+
+(4, 6, FLOOR(RANDOM() * 5) + 1),
+(4, 6, FLOOR(RANDOM() * 5) + 1),
+(4, 6, FLOOR(RANDOM() * 5) + 1),
+(4, 2, FLOOR(RANDOM() * 5) + 1),
+
+(5, 6, FLOOR(RANDOM() * 5) + 1),
+(5, 6, FLOOR(RANDOM() * 5) + 1),
+(5, 6, FLOOR(RANDOM() * 5) + 1),
+(5, 6, FLOOR(RANDOM() * 5) + 1),
+
+(6, 6, FLOOR(RANDOM() * 5) + 1),
+(6, 6, FLOOR(RANDOM() * 5) + 1),
+(6, 6, FLOOR(RANDOM() * 5) + 1),
+(6, 6, FLOOR(RANDOM() * 5) + 1),
+
+-- curso 2 materia 7 falta un alumno
+(8, 7, FLOOR(RANDOM() * 5) + 1),
+(8, 7, FLOOR(RANDOM() * 5) + 1),
+
+(9, 7, FLOOR(RANDOM() * 5) + 1),
+(9, 7, FLOOR(RANDOM() * 5) + 1),
+
+(10, 7, FLOOR(RANDOM() * 5) + 1),
+(10, 7, FLOOR(RANDOM() * 5) + 1),
+
+(11, 7, FLOOR(RANDOM() * 5) + 1),
+(11, 7, FLOOR(RANDOM() * 5) + 1),
+
+(12, 7, FLOOR(RANDOM() * 5) + 1),
+(12, 7, FLOOR(RANDOM() * 5) + 1),
+
+(13, 7, FLOOR(RANDOM() * 5) + 1),
+(13, 7, FLOOR(RANDOM() * 5) + 1),
+
+(14, 7, FLOOR(RANDOM() * 5) + 1),
+(14, 7, FLOOR(RANDOM() * 5) + 1),
+
+
+-- curso 2 materia 8
+(8, 8, FLOOR(RANDOM() * 5) + 1),
+(8, 8, FLOOR(RANDOM() * 5) + 1),
+
+(9, 8, FLOOR(RANDOM() * 5) + 1),
+(9, 8, FLOOR(RANDOM() * 5) + 1),
+
+(10, 8, FLOOR(RANDOM() * 5) + 1),
+(10, 8, FLOOR(RANDOM() * 5) + 1),
+
+(11, 8, FLOOR(RANDOM() * 5) + 1),
+(11, 8, FLOOR(RANDOM() * 5) + 1),
+
+(12, 8, FLOOR(RANDOM() * 5) + 1),
+(12, 8, FLOOR(RANDOM() * 5) + 1),
+
+(13, 8, FLOOR(RANDOM() * 5) + 1),
+(13, 8, FLOOR(RANDOM() * 5) + 1),
+
+(14, 8, FLOOR(RANDOM() * 5) + 1),
+(14, 8, FLOOR(RANDOM() * 5) + 1),
+
+
+-- curso 2 materia 9
+(8, 9, FLOOR(RANDOM() * 5) + 1),
+(8, 9, FLOOR(RANDOM() * 5) + 1),
+
+(9, 9, FLOOR(RANDOM() * 5) + 1),
+(9, 9, FLOOR(RANDOM() * 5) + 1),
+
+(10, 9, FLOOR(RANDOM() * 5) + 1),
+(10, 9, FLOOR(RANDOM() * 5) + 1),
+
+(11, 9, FLOOR(RANDOM() * 5) + 1),
+(11, 9, FLOOR(RANDOM() * 5) + 1),
+
+(12, 9, FLOOR(RANDOM() * 5) + 1),
+(12, 9, FLOOR(RANDOM() * 5) + 1),
+
+(13, 9, FLOOR(RANDOM() * 5) + 1),
+(13, 9, FLOOR(RANDOM() * 5) + 1),
+
+(14, 9, FLOOR(RANDOM() * 5) + 1),
+(14, 9, FLOOR(RANDOM() * 5) + 1),
+
+
+-- curso 2 materia 10
+(8, 10, FLOOR(RANDOM() * 5) + 1),
+(8, 10, FLOOR(RANDOM() * 5) + 1),
+
+(9, 10, FLOOR(RANDOM() * 5) + 1),
+(9, 10, FLOOR(RANDOM() * 5) + 1),
+
+(10, 10, FLOOR(RANDOM() * 5) + 1),
+(10, 10, FLOOR(RANDOM() * 5) + 1),
+
+(11, 10, FLOOR(RANDOM() * 5) + 1),
+(11, 10, FLOOR(RANDOM() * 5) + 1),
+
+(12, 10, FLOOR(RANDOM() * 5) + 1),
+(12, 10, FLOOR(RANDOM() * 5) + 1),
+
+(13, 10, FLOOR(RANDOM() * 5) + 1),
+(13, 10, FLOOR(RANDOM() * 5) + 1),
+
+(14, 10, FLOOR(RANDOM() * 5) + 1),
+(14, 10, FLOOR(RANDOM() * 5) + 1),
+
+-- curso 2 materia 11
+(8, 11, FLOOR(RANDOM() * 5) + 1),
+(8, 11, FLOOR(RANDOM() * 5) + 1),
+
+(9, 11, FLOOR(RANDOM() * 5) + 1),
+(9, 11, FLOOR(RANDOM() * 5) + 1),
+
+(10, 11, FLOOR(RANDOM() * 5) + 1),
+(10, 11, FLOOR(RANDOM() * 5) + 1),
+
+(11, 11, FLOOR(RANDOM() * 5) + 1),
+(11, 11, FLOOR(RANDOM() * 5) + 1),
+
+(12, 11, FLOOR(RANDOM() * 5) + 1),
+(12, 11, FLOOR(RANDOM() * 5) + 1),
+
+(13, 11, FLOOR(RANDOM() * 5) + 1),
+(13, 11, FLOOR(RANDOM() * 5) + 1),
+
+(14, 11, FLOOR(RANDOM() * 5) + 1),
+(14, 11, FLOOR(RANDOM() * 5) + 1),
+
+-- curso 3 materia 13
+(15, 13, FLOOR(RANDOM() * 5) + 1),
+(15, 13, FLOOR(RANDOM() * 5) + 1),
+(15, 13, FLOOR(RANDOM() * 5) + 1),
+(15, 13, FLOOR(RANDOM() * 5) + 1),
+(15, 13, FLOOR(RANDOM() * 5) + 1),
+(15, 13, FLOOR(RANDOM() * 5) + 1),
+(15, 13, FLOOR(RANDOM() * 5) + 1),
+(15, 13, FLOOR(RANDOM() * 5) + 1),
+(15, 13, FLOOR(RANDOM() * 5) + 1),
+(15, 13, FLOOR(RANDOM() * 5) + 1),
+
+(16, 13, FLOOR(RANDOM() * 5) + 1),
+(16, 13, FLOOR(RANDOM() * 5) + 1),
+(16, 13, FLOOR(RANDOM() * 5) + 1),
+(16, 13, FLOOR(RANDOM() * 5) + 1),
+(16, 13, FLOOR(RANDOM() * 5) + 1),
+(16, 13, FLOOR(RANDOM() * 5) + 1),
+(16, 13, FLOOR(RANDOM() * 5) + 1),
+(16, 13, FLOOR(RANDOM() * 5) + 1),
+(16, 13, FLOOR(RANDOM() * 5) + 1),
+(16, 13, FLOOR(RANDOM() * 5) + 1),
+-- curso 3 materia 14
+(15, 14, FLOOR(RANDOM() * 5) + 1),
+(15, 14, FLOOR(RANDOM() * 5) + 1),
+(15, 14, FLOOR(RANDOM() * 5) + 1),
+(15, 14, FLOOR(RANDOM() * 5) + 1),
+(15, 14, FLOOR(RANDOM() * 5) + 1),
+(15, 14, FLOOR(RANDOM() * 5) + 1),
+(15, 14, FLOOR(RANDOM() * 5) + 1),
+(15, 14, FLOOR(RANDOM() * 5) + 1),
+(15, 14, FLOOR(RANDOM() * 5) + 1),
+(15, 14, FLOOR(RANDOM() * 5) + 1),
+
+(16, 14, FLOOR(RANDOM() * 5) + 1),
+(16, 14, FLOOR(RANDOM() * 5) + 1),
+(16, 14, FLOOR(RANDOM() * 5) + 1),
+(16, 14, FLOOR(RANDOM() * 5) + 1),
+(16, 14, FLOOR(RANDOM() * 5) + 1),
+(16, 14, FLOOR(RANDOM() * 5) + 1),
+(16, 14, FLOOR(RANDOM() * 5) + 1),
+(16, 14, FLOOR(RANDOM() * 5) + 1),
+(16, 14, FLOOR(RANDOM() * 5) + 1),
+(16, 14, FLOOR(RANDOM() * 5) + 1),
+
+-- curso 3 materia 15
+(15, 15, FLOOR(RANDOM() * 5) + 1),
+(15, 15, FLOOR(RANDOM() * 5) + 1),
+(15, 15, FLOOR(RANDOM() * 5) + 1),
+(15, 15, FLOOR(RANDOM() * 5) + 1),
+(15, 15, FLOOR(RANDOM() * 5) + 1),
+(15, 15, FLOOR(RANDOM() * 5) + 1),
+(15, 15, FLOOR(RANDOM() * 5) + 1),
+(15, 15, FLOOR(RANDOM() * 5) + 1),
+(15, 15, FLOOR(RANDOM() * 5) + 1),
+(15, 15, FLOOR(RANDOM() * 5) + 1),
+
+(16, 15, FLOOR(RANDOM() * 5) + 1),
+(16, 15, FLOOR(RANDOM() * 5) + 1),
+(16, 15, FLOOR(RANDOM() * 5) + 1),
+(16, 15, FLOOR(RANDOM() * 5) + 1),
+(16, 15, FLOOR(RANDOM() * 5) + 1),
+(16, 15, FLOOR(RANDOM() * 5) + 1),
+(16, 15, FLOOR(RANDOM() * 5) + 1),
+(16, 15, FLOOR(RANDOM() * 5) + 1),
+(16, 15, FLOOR(RANDOM() * 5) + 1),
+(16, 15, FLOOR(RANDOM() * 5) + 1),
+
+-- curso 3 materia 16
+(15, 16, FLOOR(RANDOM() * 5) + 1),
+(15, 16, FLOOR(RANDOM() * 5) + 1),
+(15, 16, FLOOR(RANDOM() * 5) + 1),
+(15, 16, FLOOR(RANDOM() * 5) + 1),
+(15, 16, FLOOR(RANDOM() * 5) + 1),
+(15, 16, FLOOR(RANDOM() * 5) + 1),
+(15, 16, FLOOR(RANDOM() * 5) + 1),
+(15, 16, FLOOR(RANDOM() * 5) + 1),
+(15, 16, FLOOR(RANDOM() * 5) + 1),
+(15, 16, FLOOR(RANDOM() * 5) + 1),
+
+(16, 16, FLOOR(RANDOM() * 5) + 1),
+(16, 16, FLOOR(RANDOM() * 5) + 1),
+(16, 16, FLOOR(RANDOM() * 5) + 1),
+(16, 16, FLOOR(RANDOM() * 5) + 1),
+(16, 16, FLOOR(RANDOM() * 5) + 1),
+(16, 16, FLOOR(RANDOM() * 5) + 1),
+(16, 16, FLOOR(RANDOM() * 5) + 1),
+(16, 16, FLOOR(RANDOM() * 5) + 1),
+(16, 16, FLOOR(RANDOM() * 5) + 1),
+(16, 16, FLOOR(RANDOM() * 5) + 1),
+
+-- curso 3 materia 17
+(15, 17, FLOOR(RANDOM() * 5) + 1),
+(15, 17, FLOOR(RANDOM() * 5) + 1),
+(15, 17, FLOOR(RANDOM() * 5) + 1),
+(15, 17, FLOOR(RANDOM() * 5) + 1),
+(15, 17, FLOOR(RANDOM() * 5) + 1),
+(15, 17, FLOOR(RANDOM() * 5) + 1),
+(15, 17, FLOOR(RANDOM() * 5) + 1),
+(15, 17, FLOOR(RANDOM() * 5) + 1),
+(15, 17, FLOOR(RANDOM() * 5) + 1),
+(15, 17, FLOOR(RANDOM() * 5) + 1),
+
+(16, 17, FLOOR(RANDOM() * 5) + 1),
+(16, 17, FLOOR(RANDOM() * 5) + 1),
+(16, 17, FLOOR(RANDOM() * 5) + 1),
+(16, 17, FLOOR(RANDOM() * 5) + 1),
+(16, 17, FLOOR(RANDOM() * 5) + 1),
+(16, 17, FLOOR(RANDOM() * 5) + 1),
+(16, 17, FLOOR(RANDOM() * 5) + 1),
+(16, 17, FLOOR(RANDOM() * 5) + 1),
+(16, 17, FLOOR(RANDOM() * 5) + 1),
+(16, 17, FLOOR(RANDOM() * 5) + 1),
+
+-- curso 3 materia 18
+(15, 18, FLOOR(RANDOM() * 5) + 1),
+(15, 18, FLOOR(RANDOM() * 5) + 1),
+(15, 18, FLOOR(RANDOM() * 5) + 1),
+(15, 18, FLOOR(RANDOM() * 5) + 1),
+(15, 18, FLOOR(RANDOM() * 5) + 1),
+(15, 18, FLOOR(RANDOM() * 5) + 1),
+(15, 18, FLOOR(RANDOM() * 5) + 1),
+(15, 18, FLOOR(RANDOM() * 5) + 1),
+(15, 18, FLOOR(RANDOM() * 5) + 1),
+(15, 18, FLOOR(RANDOM() * 5) + 1),
+
+(16, 18, FLOOR(RANDOM() * 5) + 1),
+(16, 18, FLOOR(RANDOM() * 5) + 1),
+(16, 18, FLOOR(RANDOM() * 5) + 1),
+(16, 18, FLOOR(RANDOM() * 5) + 1),
+(16, 18, FLOOR(RANDOM() * 5) + 1),
+(16, 18, FLOOR(RANDOM() * 5) + 1),
+(16, 18, FLOOR(RANDOM() * 5) + 1),
+(16, 18, FLOOR(RANDOM() * 5) + 1),
+(16, 18, FLOOR(RANDOM() * 5) + 1),
+(16, 18, FLOOR(RANDOM() * 5) + 1),
+
+-- curso 4 materia 19
+
+(17, 19, FLOOR(RANDOM() * 5) + 1),
+(17, 19, FLOOR(RANDOM() * 5) + 1),
+(17, 19, FLOOR(RANDOM() * 5) + 1),
+
+(18, 19, FLOOR(RANDOM() * 5) + 1),
+(18, 19, FLOOR(RANDOM() * 5) + 1),
+(18, 19, FLOOR(RANDOM() * 5) + 1),
+
+(19, 19, FLOOR(RANDOM() * 5) + 1),
+(19, 19, FLOOR(RANDOM() * 5) + 1),
+(19, 19, FLOOR(RANDOM() * 5) + 1),
+
+(20, 19, FLOOR(RANDOM() * 5) + 1),
+(20, 19, FLOOR(RANDOM() * 5) + 1),
+(20, 19, FLOOR(RANDOM() * 5) + 1),
+
+(21, 19, FLOOR(RANDOM() * 5) + 1),
+(21, 19, FLOOR(RANDOM() * 5) + 1),
+(21, 19, FLOOR(RANDOM() * 5) + 1),
+
+(22, 19, FLOOR(RANDOM() * 5) + 1),
+(22, 19, FLOOR(RANDOM() * 5) + 1),
+(22, 19, FLOOR(RANDOM() * 5) + 1),
+
+-- curso 4 materia 20
+(17, 20, FLOOR(RANDOM() * 5) + 1),
+(17, 20, FLOOR(RANDOM() * 5) + 1),
+(17, 20, FLOOR(RANDOM() * 5) + 1),
+
+(18, 20, FLOOR(RANDOM() * 5) + 1),
+(18, 20, FLOOR(RANDOM() * 5) + 1),
+(18, 20, FLOOR(RANDOM() * 5) + 1),
+
+(19, 20, FLOOR(RANDOM() * 5) + 1),
+(19, 20, FLOOR(RANDOM() * 5) + 1),
+(19, 20, FLOOR(RANDOM() * 5) + 1),
+
+(20, 20, FLOOR(RANDOM() * 5) + 1),
+(20, 20, FLOOR(RANDOM() * 5) + 1),
+(20, 20, FLOOR(RANDOM() * 5) + 1),
+
+(21, 20, FLOOR(RANDOM() * 5) + 1),
+(21, 20, FLOOR(RANDOM() * 5) + 1),
+(21, 20, FLOOR(RANDOM() * 5) + 1),
+
+(22, 20, FLOOR(RANDOM() * 5) + 1),
+(22, 20, FLOOR(RANDOM() * 5) + 1),
+(22, 20, FLOOR(RANDOM() * 5) + 1),
+
+-- curso 4 materia 21
+(17, 21, FLOOR(RANDOM() * 5) + 1),
+(17, 21, FLOOR(RANDOM() * 5) + 1),
+(17, 21, FLOOR(RANDOM() * 5) + 1),
+
+(18, 21, FLOOR(RANDOM() * 5) + 1),
+(18, 21, FLOOR(RANDOM() * 5) + 1),
+(18, 21, FLOOR(RANDOM() * 5) + 1),
+
+(19, 21, FLOOR(RANDOM() * 5) + 1),
+(19, 21, FLOOR(RANDOM() * 5) + 1),
+(19, 21, FLOOR(RANDOM() * 5) + 1),
+
+(20, 21, FLOOR(RANDOM() * 5) + 1),
+(20, 21, FLOOR(RANDOM() * 5) + 1),
+(20, 21, FLOOR(RANDOM() * 5) + 1),
+
+(21, 21, FLOOR(RANDOM() * 5) + 1),
+(21, 21, FLOOR(RANDOM() * 5) + 1),
+(21, 21, FLOOR(RANDOM() * 5) + 1),
+
+(22, 21, FLOOR(RANDOM() * 5) + 1),
+(22, 21, FLOOR(RANDOM() * 5) + 1),
+(22, 21, FLOOR(RANDOM() * 5) + 1),
+
+-- curso 4 materia 22
+(17, 22, FLOOR(RANDOM() * 5) + 1),
+(17, 22, FLOOR(RANDOM() * 5) + 1),
+(17, 22, FLOOR(RANDOM() * 5) + 1),
+
+(18, 22, FLOOR(RANDOM() * 5) + 1),
+(18, 22, FLOOR(RANDOM() * 5) + 1),
+(18, 22, FLOOR(RANDOM() * 5) + 1),
+
+(19, 22, FLOOR(RANDOM() * 5) + 1),
+(19, 22, FLOOR(RANDOM() * 5) + 1),
+(19, 22, FLOOR(RANDOM() * 5) + 1),
+
+(20, 22, FLOOR(RANDOM() * 5) + 1),
+(20, 22, FLOOR(RANDOM() * 5) + 1),
+(20, 22, FLOOR(RANDOM() * 5) + 1),
+
+(21, 22, FLOOR(RANDOM() * 5) + 1),
+(21, 22, FLOOR(RANDOM() * 5) + 1),
+(21, 22, FLOOR(RANDOM() * 5) + 1),
+
+(22, 22, FLOOR(RANDOM() * 5) + 1),
+(22, 22, FLOOR(RANDOM() * 5) + 1),
+(22, 22, FLOOR(RANDOM() * 5) + 1),
+
+-- curso 4 materia 23
+(17, 23, FLOOR(RANDOM() * 5) + 1),
+(17, 23, FLOOR(RANDOM() * 5) + 1),
+(17, 23, FLOOR(RANDOM() * 5) + 1),
+
+(18, 23, FLOOR(RANDOM() * 5) + 1),
+(18, 23, FLOOR(RANDOM() * 5) + 1),
+(18, 23, FLOOR(RANDOM() * 5) + 1),
+
+(19, 23, FLOOR(RANDOM() * 5) + 1),
+(19, 23, FLOOR(RANDOM() * 5) + 1),
+(19, 23, FLOOR(RANDOM() * 5) + 1),
+
+(20, 23, FLOOR(RANDOM() * 5) + 1),
+(20, 23, FLOOR(RANDOM() * 5) + 1),
+(20, 23, FLOOR(RANDOM() * 5) + 1),
+
+(21, 23, FLOOR(RANDOM() * 5) + 1),
+(21, 23, FLOOR(RANDOM() * 5) + 1),
+(21, 23, FLOOR(RANDOM() * 5) + 1),
+
+(22, 23, FLOOR(RANDOM() * 5) + 1),
+(22, 23, FLOOR(RANDOM() * 5) + 1),
+(22, 23, FLOOR(RANDOM() * 5) + 1),
+
+-- curso 4 materia 24
+
+(17, 24, FLOOR(RANDOM() * 5) + 1),
+(17, 24, FLOOR(RANDOM() * 5) + 1),
+(17, 24, FLOOR(RANDOM() * 5) + 1),
+
+(18, 24, FLOOR(RANDOM() * 5) + 1),
+(18, 24, FLOOR(RANDOM() * 5) + 1),
+(18, 24, FLOOR(RANDOM() * 5) + 1),
+
+(19, 24, FLOOR(RANDOM() * 5) + 1),
+(19, 24, FLOOR(RANDOM() * 5) + 1),
+(19, 24, FLOOR(RANDOM() * 5) + 1),
+
+(20, 24, FLOOR(RANDOM() * 5) + 1),
+(20, 24, FLOOR(RANDOM() * 5) + 1),
+(20, 24, FLOOR(RANDOM() * 5) + 1),
+
+(21, 24, FLOOR(RANDOM() * 5) + 1),
+(21, 24, FLOOR(RANDOM() * 5) + 1),
+(21, 24, FLOOR(RANDOM() * 5) + 1),
+
+(22, 24, FLOOR(RANDOM() * 5) + 1),
+(22, 24, FLOOR(RANDOM() * 5) + 1),
+(22, 24, FLOOR(RANDOM() * 5) + 1),
+-- curso 5 materia 25
+(23, 25, FLOOR(RANDOM() * 5) + 1),
+(24, 25, FLOOR(RANDOM() * 5) + 1),
+(25, 25, FLOOR(RANDOM() * 5) + 1),
+-- curso 5 materia 26
+(23, 26, FLOOR(RANDOM() * 5) + 1),
+(24, 26, FLOOR(RANDOM() * 5) + 1),
+(25, 26, FLOOR(RANDOM() * 5) + 1),
+-- curso 5 materia 27
+(23, 27, FLOOR(RANDOM() * 5) + 1),
+(24, 27, FLOOR(RANDOM() * 5) + 1),
+(25, 27, FLOOR(RANDOM() * 5) + 1),
+-- curso 5 materia 28
+(23, 28, FLOOR(RANDOM() * 5) + 1),
+(24, 28, FLOOR(RANDOM() * 5) + 1),
+(25, 28, FLOOR(RANDOM() * 5) + 1),
+-- curso 5 materia 29
+(23, 29, FLOOR(RANDOM() * 5) + 1),
+(24, 29, FLOOR(RANDOM() * 5) + 1),
+(25, 29, FLOOR(RANDOM() * 5) + 1);
