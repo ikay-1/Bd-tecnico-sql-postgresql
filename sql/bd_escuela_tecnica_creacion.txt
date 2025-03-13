@@ -837,3 +837,27 @@ INSERT INTO "Francisco Franco".notas (estudiantes_id, materias_id, notas_puntaje
 (23, 29, FLOOR(RANDOM() * 5) + 1),
 (24, 29, FLOOR(RANDOM() * 5) + 1),
 (25, 29, FLOOR(RANDOM() * 5) + 1);
+
+
+-----------------------------------------
+--crecacion de vistas
+-----------------------------------------
+CREATE VIEW "Francisco Franco".lista_estudiantes_cursos
+ AS
+--listado de alumnos y su curso
+select		c.cursos_nombre as curso,
+			estudiantes_documento as documento,
+			UPPER(estudiantes_nombre) as estudiante,
+			estudiantes_edad,
+			case 
+				when estudiantes_edad < 19 then 'TEMPRANO'
+				when estudiantes_edad < 21 then 'NORMAL'
+				else upper('DEMORADO')
+			end as clasificacion
+from		"Francisco Franco".estudiantes as e
+left join 	"Francisco Franco".cursos as c
+	on e.cursos_id = c.cursos_id	
+order by c.cursos_nombre, estudiantes_nombre;
+
+ALTER TABLE "Francisco Franco".lista_estudiantes_cursos
+    OWNER TO "Comfe_owner";
