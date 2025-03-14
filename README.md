@@ -32,3 +32,5 @@ queries.sql → Ejemplos de consultas SQL para interactuar con los datos.<br><br
 PostgreSQL como motor de base de datos.<br>
 SQL para la creación de tablas y consultas.<br>
 
+![image](https://github.com/user-attachments/assets/0f143a45-67b3-45bd-abfb-010352d93292)
+
