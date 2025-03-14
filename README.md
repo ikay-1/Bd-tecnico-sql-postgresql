@@ -1,30 +1,34 @@
-📚 Base de Datos de Escuela Técnica - PostgreSQL
-Este repositorio contiene el diseño y la implementación de una base de datos en PostgreSQL para una escuela técnica. La base de datos modela la estructura académica de la institución, incluyendo cursos, profesores, materias, estudiantes y notas.
-🏫 Estructura de la Base de Datos
-La base de datos sigue las siguientes reglas de negocio:
+📚 Base de Datos de Escuela Técnica - PostgreSQL<br><br>
 
-Cursos y Materias
 
-Cada curso tiene varias materias.
-Cada materia pertenece a un solo curso.
-Cursos y Estudiantes
+Este repositorio contiene el diseño y la implementación de una base de datos en PostgreSQL para una escuela técnica. La base de datos modela la estructura académica de la institución, incluyendo cursos, profesores, materias, estudiantes y notas.<br><br>
 
-Un curso tiene varios estudiantes.
-Cada estudiante pertenece a un solo curso.
-Profesores y Materias
+🏫 Estructura de la Base de Datos<br>
+La base de datos sigue las siguientes reglas de negocio:<br>
 
-Cada profesor solo dicta una materia.
-Cada materia es dictada por un solo profesor.
-Estudiantes y Notas
+Cursos y Materias<br>
 
-Un estudiante puede tener varias notas en una misma materia.
-Cada nota está asociada a un estudiante y una materia.
+Cada curso tiene varias materias.<br>
+Cada materia pertenece a un solo curso.<br><br>
 
-📂 Estructura del Proyecto
-schema.sql → Archivo con la estructura de las tablas y relaciones.
-insert_data.sql → Archivo con datos de prueba para poblar la base de datos.
-queries.sql → Ejemplos de consultas SQL para interactuar con los datos.
-🛠 Tecnologías Utilizadas
-PostgreSQL como motor de base de datos.
-SQL para la creación de tablas y consultas.
+Cursos y Estudiantes<br>
+Un curso tiene varios estudiantes.<br>
+Cada estudiante pertenece a un solo curso.<br><br>
+
+Profesores y Materias<br>
+Cada profesor solo dicta una materia.<br>
+Cada materia es dictada por un solo profesor.<br><br>
+
+Estudiantes y Notas<br>
+Un estudiante puede tener varias notas en una misma materia.<br>
+Cada nota está asociada a un estudiante y una materia.<br><br>
+
+📂 Estructura del Proyecto<br>
+schema.sql → Archivo con la estructura de las tablas y relaciones.<br>
+insert_data.sql → Archivo con datos de prueba para poblar la base de datos.<br>
+queries.sql → Ejemplos de consultas SQL para interactuar con los datos.<br><br>
+
+🛠 Tecnologías Utilizadas<br>
+PostgreSQL como motor de base de datos.<br>
+SQL para la creación de tablas y consultas.<br>
 
