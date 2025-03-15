@@ -879,7 +879,7 @@ ALTER TABLE "Francisco Franco".lista_materias_sin_nota
     OWNER TO "Comfe_owner";
 	
 	
-    
+
 -----------------------------------------
 --crecacion de procedimiento
 -----------------------------------------	
@@ -944,3 +944,28 @@ left join "Francisco Franco".estudiantes as e
 Where e.estudiantes_id = 1
 order by m.materias_nombre
 
+-- funcion busca estudiantes por su nombre 
+CREATE OR REPLACE FUNCTION 
+	"Francisco Franco".busca_estudiantes(nombre_buscar VARCHAR) 
+RETURNS TABLE(nombre VARCHAR, curso VARCHAR, materia VARCHAR, cant_notas INTEGER) AS
+$$
+BEGIN
+    RETURN QUERY
+    SELECT  e.estudiantes_nombre,
+            c.cursos_nombre,
+            m.materias_nombre,
+            COUNT(*)::INTEGER  -- Conversión explícita a INTEGER
+    FROM "Francisco Franco".notas AS n
+    LEFT JOIN "Francisco Franco".estudiantes AS e
+        ON n.estudiantes_id = e.estudiantes_id
+    LEFT JOIN "Francisco Franco".materias AS m
+        ON n.materias_id = m.materias_id
+    LEFT JOIN "Francisco Franco".cursos AS c
+        ON m.cursos_id = c.cursos_id
+    WHERE UPPER(e.estudiantes_nombre) LIKE UPPER('%' || nombre_buscar || '%')
+    GROUP BY e.estudiantes_nombre, m.materias_nombre, c.cursos_nombre
+    ORDER BY e.estudiantes_nombre, m.materias_nombre;
+END;
+$$ LANGUAGE plpgsql;
+
+SELECT * FROM "Francisco Franco".busca_estudiantes('a');
