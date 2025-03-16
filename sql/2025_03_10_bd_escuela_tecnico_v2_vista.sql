@@ -1,3 +1,6 @@
+--------------------------------------------------------------------
+-- listado de alumos con o sin cursos
+--------------------------------------------------------------------
 CREATE VIEW "Francisco Franco".lista_estudiantes_cursos
  AS
 --listado de alumnos y su curso
@@ -18,7 +21,9 @@ order by c.cursos_nombre, estudiantes_nombre;
 ALTER TABLE "Francisco Franco".lista_estudiantes_cursos
     OWNER TO "Comfe_owner";
 	
-
+--------------------------------------------------------------------
+-- listado de materias sin nota
+--------------------------------------------------------------------
 CREATE VIEW "Francisco Franco".lista_materias_sin_nota
  AS
 select 	c.cursos_nombre as curso,
