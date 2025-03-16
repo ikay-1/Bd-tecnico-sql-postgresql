@@ -11,7 +11,9 @@ language sql;
 
 select "Francisco Franco".suma(1,2);
 
+------------------------------------------------------------------------------------------
 -- funcion devuelve numero de notas de una materia de un estudiante
+------------------------------------------------------------------------------------------
 create or replace function 
 	"Francisco Franco".buscar_num_notas_est_y_mate(estudiante int, materia int) 
 	returns int as
@@ -20,14 +22,15 @@ declare
 	cant_notas int;
 begin
 	cant_notas := (select count(*) 
-					from "Francisco Franco".notas 
-					where estudiantes_id = estudiante
-					and materias_id = materia);
+			from "Francisco Franco".notas 
+			where estudiantes_id = estudiante
+			and materias_id = materia);
 	return cant_notas;
 end;
 $$ language plpgsql;
 
 select "Francisco Franco".buscar_num_notas_est_y_mate(1,1);
+
 
 -- notas de cada materia de un estudiante
 select 	c.cursos_nombre as curso,
@@ -42,8 +45,9 @@ left join "Francisco Franco".estudiantes as e
 Where e.estudiantes_id = 1
 order by m.materias_nombre;
 
-
+------------------------------------------------------------------------------------------
 -- funcion busca estudiantes por su nombre 
+------------------------------------------------------------------------------------------
 CREATE OR REPLACE FUNCTION 
 	"Francisco Franco".busca_estudiantes(nombre_buscar VARCHAR) 
 RETURNS TABLE(nombre VARCHAR, curso VARCHAR, materia VARCHAR, cant_notas INTEGER) AS
